@@ -25,7 +25,8 @@ export const STATUS_MESSAGES = {
 
 // Models
 export const MODELS = {
-  GPT5: "gpt-5",
+  GPT5_CODEX: "gpt-5-codex",
+  GPT5: "gpt-5"
 } as const;
 
 // Sandbox modes
@@ -94,7 +95,7 @@ export const CLI = {
   },
   // Default values
   DEFAULTS: {
-    MODEL: "gpt-5",
+    MODEL: "gpt-5-codex",
     SANDBOX: "read-only",
     APPROVAL: "untrusted",
     BOOLEAN_TRUE: "true",

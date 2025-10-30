@@ -46,10 +46,9 @@ export async function executeCodex(
     args.push('exec');
   }
   
-  // Add model selection (always gpt-5)
-  if (model) {
-    args.push(CLI.FLAGS.MODEL, MODELS.GPT5);
-  }
+  // Add model selection
+  const selectedModel = model || MODELS.GPT5_CODEX;
+  args.push(CLI.FLAGS.MODEL, selectedModel);
   
   // Add sandbox mode
   if (sandbox) {

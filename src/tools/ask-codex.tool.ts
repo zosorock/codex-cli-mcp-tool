@@ -76,7 +76,7 @@ function buildCodexPrompt(userPrompt: string, config: {
 
 const askCodexArgsSchema = z.object({
   prompt: z.string().min(1).describe("User query or instruction for Codex. Can include file references and complex requests."),
-  model: z.string().optional().describe(`Optional model to use. Options: ${Object.values(MODELS).join(', ')}. Defaults to gpt-5.`),
+  model: z.string().optional().describe(`Optional model to use. Options: ${Object.values(MODELS).join(', ')}. Defaults to gpt-5-codex.`),
   sandbox: z.string().optional().describe(`Sandbox mode: ${Object.values(SANDBOX_MODES).join(', ')}. Defaults to read-only for safety.`),
   approval: z.string().optional().describe(`Approval policy: ${Object.values(APPROVAL_POLICIES).join(', ')}. Defaults to untrusted for safety.`),
   image: z.union([z.string(), z.array(z.string())]).optional().describe("Optional image file path(s) to include with the prompt"),
@@ -125,7 +125,7 @@ export const askCodexTool: UnifiedTool = {
       });
 
       // Detailed progress reporting
-      const modelName = (model as string) || 'gpt-5';
+      const modelName = (model as string) || 'gpt-5-codex';
       const sandboxMode = (sandbox as string) || 'read-only';
       
       if (onProgress) {
@@ -188,8 +188,7 @@ npm install -g @openai/codex
 **Immediate Solutions:**
 1. **Wait and retry:** Rate limits reset periodically
 2. **Check quota:** Visit OpenAI dashboard for usage details
-
-**Note:** Only GPT-5 model is supported`;
+3. **Use default model:** Defaults to gpt-5-codex which has standard limits`;
       }
       
       if (errorMessage.includes('timeout')) {
@@ -198,7 +197,7 @@ npm install -g @openai/codex
 **Solutions:**
 1. **Increase timeout:** Add \`timeout: 300000\` (5 minutes)
 2. **Simplify request:** Break complex queries into smaller parts  
-3. **Retry request:** GPT-5 is the only supported model
+3. **Retry request:** \`gpt-5\` and \`gpt-5-codex\` are the only supported models
 4. **Check connectivity:** Ensure stable internet connection`;
       }
       
@@ -216,7 +215,8 @@ npm install -g @openai/codex
         return `❌ **Model Error**: Requested model may not be available
 
 **Model Alternatives:**
-- **GPT-5:** \`model: "${MODELS.GPT5}"\` (only supported model)
+- **GPT-5-Codex:** \`model: "${MODELS.GPT5_CODEX}"\` (default model)
+- **GPT-5:** \`model: "${MODELS.GPT5}"\` (also supported)
 
 **Check:** Verify model availability in your OpenAI account.`;
       }
@@ -225,7 +225,7 @@ npm install -g @openai/codex
       return `❌ **Codex Execution Error**: ${errorMessage}
 
 **Request Configuration:**
-- **Model:** ${model || 'gpt-5 (default)'}
+- **Model:** ${model || 'gpt-5-codex (default)'}
 - **Sandbox:** ${sandbox || 'read-only (default)'}  
 - **Approval:** ${approval || 'untrusted (default)'}
 - **Working Directory:** ${workingDir || 'current directory'}

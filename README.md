@@ -82,15 +82,15 @@ Apply the latest Codex-generated diff to your git repository.
 ### Environment Variables
 ```bash
 OPENAI_API_KEY=sk-...           # OpenAI API key
-CODEX_MODEL=gpt-5               # Default model
+CODEX_MODEL=gpt-5-codex         # Default model
 CODEX_SANDBOX_MODE=read-only    # Default sandbox mode
 ```
 
 ### Config File (~/.codex/config.toml)
 ```toml
 [model]
-provider = "openai"
-default = "gpt-5"
+preferred_auth_method = "chatgpt"
+default = "gpt-5-codex"
 reasoning_effort = "medium"
 
 [sandbox]
