@@ -25,8 +25,10 @@ export const STATUS_MESSAGES = {
 
 // Models
 export const MODELS = {
-  GPT5_CODEX: "gpt-5-codex",
-  GPT5: "gpt-5"
+  GPT51_CODEX_MAX: "gpt-5.1-codex-max",
+  GPT51_CODEX: "gpt-5.1-codex",
+  GPT51_CODEX_MINI: "gpt-5.1-codex-mini",
+  GPT51: "gpt-5.1"
 } as const;
 
 // Sandbox modes

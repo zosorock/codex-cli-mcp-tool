@@ -1,7 +1,18 @@
 import { z } from 'zod';
+import { readFile } from 'fs/promises';
 import { UnifiedTool } from './registry.js';
 import { executeCommand } from '../utils/commandExecutor.js';
 import { CLI } from '../constants.js';
+
+// Read version from package.json
+const getVersion = async () => {
+  try {
+    const packageJson = await readFile(new URL('../../package.json', import.meta.url), 'utf8');
+    return JSON.parse(packageJson).version;
+  } catch {
+    return 'unknown';
+  }
+};
 
 // Ping tool for testing MCP connection
 const pingArgsSchema = z.object({
@@ -100,9 +111,12 @@ export const versionTool: UnifiedTool = {
   category: 'utility',
   execute: async () => {
     try {
-      // Get Codex CLI version
-      const codexVersion = await executeCommand(CLI.COMMANDS.CODEX, [CLI.FLAGS.VERSION]);
-      
+      // Get versions
+      const [codexVersion, mcpVersion] = await Promise.all([
+        executeCommand(CLI.COMMANDS.CODEX, [CLI.FLAGS.VERSION]),
+        getVersion()
+      ]);
+
       return `# Version Information
 
 ## Codex CLI
@@ -111,15 +125,16 @@ ${codexVersion}
 \`\`\`
 
 ## Codex MCP Server
-- Version: 1.0.5
+- Version: ${mcpVersion}
 - MCP SDK: @modelcontextprotocol/sdk ^0.5.0
 - Node.js: ${process.version}
 - Platform: ${process.platform}`;
     } catch (error) {
+      const mcpVersion = await getVersion();
       return `# Version Information
 
 ## Codex MCP Server
-- Version: 1.0.5
+- Version: ${mcpVersion}
 - MCP SDK: @modelcontextprotocol/sdk ^0.5.0
 - Node.js: ${process.version}
 - Platform: ${process.platform}

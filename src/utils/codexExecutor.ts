@@ -47,7 +47,7 @@ export async function executeCodex(
   }
   
   // Add model selection
-  const selectedModel = model || MODELS.GPT5_CODEX;
+  const selectedModel = model || MODELS.GPT51_CODEX_MAX;
   args.push(CLI.FLAGS.MODEL, selectedModel);
   
   // Add sandbox mode
@@ -202,8 +202,7 @@ export function validateModel(model: string): boolean {
 }
 
 export function getModelFallbacks(_model: string): string[] {
-  // Only GPT-5 is supported now
-  return [MODELS.GPT5];
+  return [MODELS.GPT51];
 }
 
 export function getSandboxFallbacks(sandbox: string): string[] {

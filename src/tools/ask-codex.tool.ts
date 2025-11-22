@@ -215,8 +215,10 @@ npm install -g @openai/codex
         return `❌ **Model Error**: Requested model may not be available
 
 **Model Alternatives:**
-- **GPT-5-Codex:** \`model: "${MODELS.GPT5_CODEX}"\` (default model)
-- **GPT-5:** \`model: "${MODELS.GPT5}"\` (also supported)
+- **GPT-5.1-Codex-Max:** \`model: "${MODELS.GPT51_CODEX_MAX}"\` (default model)
+- **GPT-5.1-Codex:** \`model: "${MODELS.GPT51_CODEX}"\` (additional model)
+- **GPT-5.1-Codex-Mini:** \`model: "${MODELS.GPT51_CODEX_MINI}"\` (also supported)
+- **GPT-5.1:** \`model: "${MODELS.GPT51}"\` (also supported)
 
 **Check:** Verify model availability in your OpenAI account.`;
       }
@@ -225,7 +227,7 @@ npm install -g @openai/codex
       return `❌ **Codex Execution Error**: ${errorMessage}
 
 **Request Configuration:**
-- **Model:** ${model || 'gpt-5-codex (default)'}
+- **Model:** ${model || 'gpt-5.1-codex-max (default)'}
 - **Sandbox:** ${sandbox || 'read-only (default)'}  
 - **Approval:** ${approval || 'untrusted (default)'}
 - **Working Directory:** ${workingDir || 'current directory'}
