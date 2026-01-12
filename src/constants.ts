@@ -25,6 +25,8 @@ export const STATUS_MESSAGES = {
 
 // Models
 export const MODELS = {
+  GPT52_CODEX: "gpt-5.2-codex",
+  GPT52: "gpt-5.2",
   GPT51_CODEX_MAX: "gpt-5.1-codex-max",
   GPT51_CODEX: "gpt-5.1-codex",
   GPT51_CODEX_MINI: "gpt-5.1-codex-mini",
@@ -97,7 +99,7 @@ export const CLI = {
   },
   // Default values
   DEFAULTS: {
-    MODEL: "gpt-5-codex",
+    MODEL: "gpt-5.2-codex",
     SANDBOX: "read-only",
     APPROVAL: "untrusted",
     BOOLEAN_TRUE: "true",

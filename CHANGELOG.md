@@ -5,6 +5,18 @@ All notable changes to the Codex CLI MCP project will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+- Upgraded @modelcontextprotocol/sdk to 1.25.2
+- Upgraded zod to 4.3.5
+- Upgraded vitest to 4.0.16
+- Upgraded @types/node to 25.0.6
+- Raised minimum Node.js version to >=20.19.0
+
+### Removed
+- Removed zod-to-json-schema in favor of zod v4 native JSON Schema support
+
 ## [1.0.0] - 2025-08-19
 
 ### Added

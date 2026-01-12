@@ -30,13 +30,12 @@ import {
 const server = new Server(
   {
     name: "codex-cli-mcp",
-    version: "1.0.7",
+    version: "1.0.8",
   },
   {
     capabilities: {
       tools: {},
       prompts: {},
-      notifications: {},
       logging: {},
     },
   },

@@ -1,7 +1,7 @@
 import { Tool, Prompt } from "@modelcontextprotocol/sdk/types.js";
 import { ToolArguments } from "../constants.js";
+import * as z from "zod";
 import { ZodTypeAny, ZodError } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
 
 export interface UnifiedTool {
   name: string;
@@ -29,7 +29,7 @@ export function toolExists(toolName: string): boolean {
 
 export function getToolDefinitions(): Tool[] {
   return toolRegistry.map(tool => {
-    const raw = zodToJsonSchema(tool.zodSchema, tool.name) as any;
+    const raw = z.toJSONSchema(tool.zodSchema) as any;
     const def = raw.definitions?.[tool.name] ?? raw;
     const inputSchema: Tool['inputSchema'] = {
       type: "object",
@@ -46,7 +46,7 @@ export function getToolDefinitions(): Tool[] {
 }
 
 function extractPromptArguments(zodSchema: ZodTypeAny): Array<{name: string; description: string; required: boolean}> {
-  const jsonSchema = zodToJsonSchema(zodSchema) as any;
+  const jsonSchema = z.toJSONSchema(zodSchema) as any;
   const properties = jsonSchema.properties || {};
   const required = jsonSchema.required || [];
   
@@ -78,7 +78,7 @@ export async function executeTool(
   }
   
   try {
-    const validatedArgs = tool.zodSchema.parse(args);
+    const validatedArgs = tool.zodSchema.parse(args) as ToolArguments;
     return tool.execute(validatedArgs, onProgress);
   } catch (error) {
     if (error instanceof ZodError) {

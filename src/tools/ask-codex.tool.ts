@@ -80,7 +80,7 @@ const askCodexArgsSchema = z.object({
   sandbox: z.string().optional().describe(`Sandbox mode: ${Object.values(SANDBOX_MODES).join(', ')}. Defaults to read-only for safety.`),
   approval: z.string().optional().describe(`Approval policy: ${Object.values(APPROVAL_POLICIES).join(', ')}. Defaults to untrusted for safety.`),
   image: z.union([z.string(), z.array(z.string())]).optional().describe("Optional image file path(s) to include with the prompt"),
-  config: z.union([z.string(), z.record(z.any())]).optional().describe("Configuration overrides as 'key=value' string or object"),
+  config: z.union([z.string(), z.record(z.string(), z.any())]).optional().describe("Configuration overrides as 'key=value' string or object"),
   timeout: z.number().optional().describe("Maximum execution time in milliseconds (optional)"),
   workingDir: z.string().optional().describe("Working directory for Codex execution"),
   profile: z.string().optional().describe("Configuration profile to use from ~/.codex/config.toml"),
@@ -125,8 +125,8 @@ export const askCodexTool: UnifiedTool = {
       });
 
       // Detailed progress reporting
-      const modelName = (model as string) || 'gpt-5-codex';
-      const sandboxMode = (sandbox as string) || 'read-only';
+      const modelName = (model as string) || MODELS.GPT52_CODEX;
+      const sandboxMode = (sandbox as string) || SANDBOX_MODES.READ_ONLY;
       
       if (onProgress) {
         onProgress(`Executing Codex with ${modelName} in ${sandboxMode} mode...`);
@@ -197,7 +197,7 @@ npm install -g @openai/codex
 **Solutions:**
 1. **Increase timeout:** Add \`timeout: 300000\` (5 minutes)
 2. **Simplify request:** Break complex queries into smaller parts  
-3. **Retry request:** \`gpt-5\` and \`gpt-5-codex\` are the only supported models
+3. **Retry request:** there are many supported models including\`gpt-5.1-codex-max\` and \`gpt-5.2-codex\`
 4. **Check connectivity:** Ensure stable internet connection`;
       }
       
@@ -215,7 +215,9 @@ npm install -g @openai/codex
         return `❌ **Model Error**: Requested model may not be available
 
 **Model Alternatives:**
-- **GPT-5.1-Codex-Max:** \`model: "${MODELS.GPT51_CODEX_MAX}"\` (default model)
+- **GPT-5.2-Codex:** \`model: "${MODELS.GPT52_CODEX}"\` (default model)
+- **GPT-5.2:** \`model: "${MODELS.GPT52}"\` (also supported)
+- **GPT-5.1-Codex-Max:** \`model: "${MODELS.GPT51_CODEX_MAX}"\` (previous model)
 - **GPT-5.1-Codex:** \`model: "${MODELS.GPT51_CODEX}"\` (additional model)
 - **GPT-5.1-Codex-Mini:** \`model: "${MODELS.GPT51_CODEX_MINI}"\` (also supported)
 - **GPT-5.1:** \`model: "${MODELS.GPT51}"\` (also supported)
@@ -227,7 +229,7 @@ npm install -g @openai/codex
       return `❌ **Codex Execution Error**: ${errorMessage}
 
 **Request Configuration:**
-- **Model:** ${model || 'gpt-5.1-codex-max (default)'}
+- **Model:** ${model || 'gpt-5.2-codex (default)'}
 - **Sandbox:** ${sandbox || 'read-only (default)'}  
 - **Approval:** ${approval || 'untrusted (default)'}
 - **Working Directory:** ${workingDir || 'current directory'}

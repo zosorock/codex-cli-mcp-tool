@@ -126,7 +126,7 @@ ${codexVersion}
 
 ## Codex MCP Server
 - Version: ${mcpVersion}
-- MCP SDK: @modelcontextprotocol/sdk ^0.5.0
+- MCP SDK: @modelcontextprotocol/sdk ^1.25.2
 - Node.js: ${process.version}
 - Platform: ${process.platform}`;
     } catch (error) {
@@ -135,7 +135,7 @@ ${codexVersion}
 
 ## Codex MCP Server
 - Version: ${mcpVersion}
-- MCP SDK: @modelcontextprotocol/sdk ^0.5.0
+- MCP SDK: @modelcontextprotocol/sdk ^1.25.2
 - Node.js: ${process.version}
 - Platform: ${process.platform}
 

@@ -40,6 +40,26 @@ export async function executeCommand(
     let isResolved = false;
     let lastReportedLength = 0;
     let lastReportedLengthStderr = 0;
+
+    const onSigint = () => {
+      if (!isResolved) {
+        childProcess.kill('SIGTERM');
+      }
+    };
+
+    const onSigterm = () => {
+      if (!isResolved) {
+        childProcess.kill('SIGTERM');
+      }
+    };
+
+    const removeSignalHandlers = () => {
+      process.off('SIGINT', onSigint);
+      process.off('SIGTERM', onSigterm);
+    };
+
+    process.on('SIGINT', onSigint);
+    process.on('SIGTERM', onSigterm);
     
     // Set up timeout if specified
     // T-014: Timeout mechanism verified compatible with T-007/T-011 stream selection changes
@@ -54,6 +74,7 @@ export async function executeCommand(
         if (!isResolved) {
           isResolved = true;
           childProcess.kill('SIGTERM');
+          removeSignalHandlers();
           Logger.error(`Command timed out after ${timeout}ms`);
           reject(new Error(`Command timed out after ${timeout}ms`));
         }
@@ -106,6 +127,7 @@ export async function executeCommand(
       if (!isResolved) {
         isResolved = true;
         if (timeoutHandle) clearTimeout(timeoutHandle);
+        removeSignalHandlers();
         Logger.error(`Process error:`, error);
         
         if (error.message.includes("ENOENT")) {
@@ -120,6 +142,7 @@ export async function executeCommand(
       if (!isResolved) {
         isResolved = true;
         if (timeoutHandle) clearTimeout(timeoutHandle);
+        removeSignalHandlers();
 
         if (code === 0) {
           /*
@@ -193,16 +216,6 @@ export async function executeCommand(
     // - Compatible with T-007 stderr preference: handlers don't touch stdout/stderr buffers
     // - Note: Signal handlers follow simplified pattern (check flag + kill) vs timeout handler
     //   (set flag + kill + log + reject). Close handler will still execute after signal.
-    process.on('SIGINT', () => {
-      if (!isResolved) {
-        childProcess.kill('SIGTERM');
-      }
-    });
-
-    process.on('SIGTERM', () => {
-      if (!isResolved) {
-        childProcess.kill('SIGTERM');
-      }
-    });
+    // Signal handlers are registered above and removed on completion to avoid listener buildup.
   });
 }

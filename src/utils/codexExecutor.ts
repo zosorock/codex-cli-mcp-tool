@@ -47,7 +47,7 @@ export async function executeCodex(
   }
   
   // Add model selection
-  const selectedModel = model || MODELS.GPT51_CODEX_MAX;
+  const selectedModel = model || MODELS.GPT52_CODEX;
   args.push(CLI.FLAGS.MODEL, selectedModel);
   
   // Add sandbox mode
