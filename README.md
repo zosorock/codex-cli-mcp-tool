@@ -44,9 +44,8 @@ Execute Codex with comprehensive parameter support for code analysis, generation
 
 **Parameters:**
 - `prompt` (required): Your query or instruction
-- `model` (optional): gpt-5 (default and only supported model)
+- `model` (optional): gpt-5.3-codex (default), gpt-5.3-codex-spark, gpt-5.2-codex, gpt-5.2
 - `sandbox` (optional): read-only, workspace-write, danger-full-access
-- `approval` (optional): untrusted, on-failure, on-request, never
 - `image` (optional): Image file path(s) to include
 - `config` (optional): Configuration overrides
 - `timeout` (optional): Maximum execution time
@@ -61,7 +60,7 @@ Non-interactive Codex execution for automation workflows.
 
 **Parameters:**
 - `prompt` (required): Command or instruction
-- `model` (optional): Always gpt-5
+- `model` (optional): gpt-5.3-codex (default), gpt-5.3-codex-spark, gpt-5.2-codex, gpt-5.2
 - `sandbox` (optional): Sandbox mode
 - `timeout` (optional): Execution timeout
 
@@ -82,7 +81,7 @@ Apply the latest Codex-generated diff to your git repository.
 ### Environment Variables
 ```bash
 OPENAI_API_KEY=sk-...           # OpenAI API key
-CODEX_MODEL=gpt-5-codex         # Default model
+CODEX_MODEL=gpt-5.3-codex       # Default model
 CODEX_SANDBOX_MODE=read-only    # Default sandbox mode
 ```
 
@@ -90,16 +89,12 @@ CODEX_SANDBOX_MODE=read-only    # Default sandbox mode
 ```toml
 [model]
 preferred_auth_method = "chatgpt"
-default = "gpt-5-codex"
+default = "gpt-5.3-codex"
 reasoning_effort = "medium"
 
 [sandbox]
 default_mode = "read-only"
 permissions = ["disk-read-access"]
-
-[approval]
-policy = "untrusted"
-trusted_commands = ["ls", "cat", "grep"]
 ```
 
 ## Sandbox Modes
@@ -122,7 +117,7 @@ ask-codex "Generate unit tests for the User class" sandbox="workspace-write"
 
 ### Debugging
 ```
-ask-codex "Fix the bug in login function" approval="on-request"
+ask-codex "Fix the bug in login function" sandbox="workspace-write"
 ```
 
 ### File Operations
@@ -156,7 +151,6 @@ apply-diff validate=true
 
 3. **Permission denied**:
    - Use appropriate sandbox mode
-   - Check approval policy settings
    - Verify file permissions
 
 4. **Rate limits**:

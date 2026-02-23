@@ -9,7 +9,7 @@ export const ERROR_MESSAGES = {
   TOOL_NOT_FOUND: "not found in registry",
   NO_PROMPT_PROVIDED: "Please provide a prompt for analysis. Use @ syntax to include files (e.g., '@largefile.js explain what this does') or ask general questions",
   SANDBOX_VIOLATION: "Operation blocked by sandbox policy",
-  UNSAFE_COMMAND: "Command requires approval or elevated permissions",
+  UNSAFE_COMMAND: "Command requires elevated permissions",
 } as const;
 
 // Status messages
@@ -25,12 +25,10 @@ export const STATUS_MESSAGES = {
 
 // Models
 export const MODELS = {
+  GPT53_CODEX: "gpt-5.3-codex",
+  GPT53_CODEX_SPARK: "gpt-5.3-codex-spark",
   GPT52_CODEX: "gpt-5.2-codex",
   GPT52: "gpt-5.2",
-  GPT51_CODEX_MAX: "gpt-5.1-codex-max",
-  GPT51_CODEX: "gpt-5.1-codex",
-  GPT51_CODEX_MINI: "gpt-5.1-codex-mini",
-  GPT51: "gpt-5.1"
 } as const;
 
 // Sandbox modes
@@ -38,14 +36,6 @@ export const SANDBOX_MODES = {
   READ_ONLY: "read-only",
   WORKSPACE_WRITE: "workspace-write",
   DANGER_FULL_ACCESS: "danger-full-access",
-} as const;
-
-// Approval policies
-export const APPROVAL_POLICIES = {
-  UNTRUSTED: "untrusted",
-  ON_FAILURE: "on-failure",
-  ON_REQUEST: "on-request",
-  NEVER: "never",
 } as const;
 
 // MCP Protocol Constants
@@ -87,7 +77,6 @@ export const CLI = {
     MODEL: "-m",
     CONFIG: "-c",
     SANDBOX: "--sandbox",
-    APPROVAL: "-a",
     IMAGE: "-i",
     PROFILE: "-p",
     OSS: "--oss",
@@ -95,13 +84,13 @@ export const CLI = {
     VERSION: "--version",
     WORKING_DIR: "-C",
     FULL_AUTO: "--full-auto",
+    SKIP_GIT_REPO_CHECK: "--skip-git-repo-check",
     DANGEROUSLY_BYPASS: "--dangerously-bypass-approvals-and-sandbox",
   },
   // Default values
   DEFAULTS: {
-    MODEL: "gpt-5.2-codex",
+    MODEL: "gpt-5.3-codex",
     SANDBOX: "read-only",
-    APPROVAL: "untrusted",
     BOOLEAN_TRUE: "true",
     BOOLEAN_FALSE: "false",
   },
@@ -113,7 +102,6 @@ export interface ToolArguments {
   prompt?: string;
   model?: string;
   sandbox?: string | boolean;
-  approval?: string;
   image?: string | string[];
   config?: string | Record<string, any>;
   
@@ -143,7 +131,6 @@ export interface CodexOutput {
     workdir: string;
     model: string;
     provider: string;
-    approval: string;
     sandbox: string;
     reasoning_effort?: string;
     reasoning_summaries?: string;
@@ -166,10 +153,6 @@ export interface CodexConfig {
   sandbox?: {
     default_mode?: string;
     permissions?: string[];
-  };
-  approval?: {
-    policy?: string;
-    trusted_commands?: string[];
   };
   shell_environment?: {
     policy?: string;

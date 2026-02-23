@@ -121,7 +121,6 @@ export function formatCodexResponse(output: CodexOutput, includeThinking: boolea
     formatted += `**Codex Configuration:**\n`;
     if (output.metadata.model) formatted += `- Model: ${output.metadata.model}\n`;
     if (output.metadata.sandbox) formatted += `- Sandbox: ${output.metadata.sandbox}\n`;
-    if (output.metadata.approval) formatted += `- Approval: ${output.metadata.approval}\n`;
     formatted += '\n';
   }
   

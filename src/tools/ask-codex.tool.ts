@@ -1,12 +1,11 @@
 import { z } from 'zod';
 import { UnifiedTool } from './registry.js';
 import { executeCodex, formatCodexResponseForMCP } from '../utils/codexExecutor.js';
-import { 
-  ERROR_MESSAGES, 
+import {
+  ERROR_MESSAGES,
   STATUS_MESSAGES,
   MODELS,
-  SANDBOX_MODES,
-  APPROVAL_POLICIES
+  SANDBOX_MODES
 } from '../constants.js';
 
 /*
@@ -76,9 +75,8 @@ function buildCodexPrompt(userPrompt: string, config: {
 
 const askCodexArgsSchema = z.object({
   prompt: z.string().min(1).describe("User query or instruction for Codex. Can include file references and complex requests."),
-  model: z.string().optional().describe(`Optional model to use. Options: ${Object.values(MODELS).join(', ')}. Defaults to gpt-5-codex.`),
+  model: z.string().optional().describe(`Optional model to use. Options: ${Object.values(MODELS).join(', ')}. Defaults to gpt-5.3-codex.`),
   sandbox: z.string().optional().describe(`Sandbox mode: ${Object.values(SANDBOX_MODES).join(', ')}. Defaults to read-only for safety.`),
-  approval: z.string().optional().describe(`Approval policy: ${Object.values(APPROVAL_POLICIES).join(', ')}. Defaults to untrusted for safety.`),
   image: z.union([z.string(), z.array(z.string())]).optional().describe("Optional image file path(s) to include with the prompt"),
   config: z.union([z.string(), z.record(z.string(), z.any())]).optional().describe("Configuration overrides as 'key=value' string or object"),
   timeout: z.number().optional().describe("Maximum execution time in milliseconds (optional)"),
@@ -99,9 +97,8 @@ export const askCodexTool: UnifiedTool = {
   execute: async (args, onProgress) => {
     const { 
       prompt, 
-      model, 
-      sandbox, 
-      approval, 
+      model,
+      sandbox,
       image, 
       config, 
       timeout, 
@@ -125,7 +122,7 @@ export const askCodexTool: UnifiedTool = {
       });
 
       // Detailed progress reporting
-      const modelName = (model as string) || MODELS.GPT52_CODEX;
+      const modelName = (model as string) || MODELS.GPT53_CODEX;
       const sandboxMode = (sandbox as string) || SANDBOX_MODES.READ_ONLY;
       
       if (onProgress) {
@@ -137,7 +134,6 @@ export const askCodexTool: UnifiedTool = {
         {
           model: model as string,
           sandbox: sandbox as string,
-          approval: approval as string,
           image,
           config,
           timeout: timeout as number,
@@ -188,7 +184,7 @@ npm install -g @openai/codex
 **Immediate Solutions:**
 1. **Wait and retry:** Rate limits reset periodically
 2. **Check quota:** Visit OpenAI dashboard for usage details
-3. **Use default model:** Defaults to gpt-5-codex which has standard limits`;
+3. **Use default model:** Defaults to gpt-5.3-codex which has standard limits`;
       }
       
       if (errorMessage.includes('timeout')) {
@@ -197,7 +193,7 @@ npm install -g @openai/codex
 **Solutions:**
 1. **Increase timeout:** Add \`timeout: 300000\` (5 minutes)
 2. **Simplify request:** Break complex queries into smaller parts  
-3. **Retry request:** there are many supported models including\`gpt-5.1-codex-max\` and \`gpt-5.2-codex\`
+3. **Retry request:** try a different supported model (for example \`gpt-5.3-codex-spark\` or \`gpt-5.2-codex\`)
 4. **Check connectivity:** Ensure stable internet connection`;
       }
       
@@ -206,21 +202,18 @@ npm install -g @openai/codex
 
 **Permission Solutions:**
 1. **Relax sandbox:** Use \`sandbox: "${SANDBOX_MODES.WORKSPACE_WRITE}"\`
-2. **Approval policy:** Try \`approval: "${APPROVAL_POLICIES.ON_REQUEST}"\`  
-3. **Full access:** Use \`sandbox: "${SANDBOX_MODES.DANGER_FULL_ACCESS}"\` (caution!)
-4. **Check file permissions:** Ensure Codex can access target files`;
+2. **Full access:** Use \`sandbox: "${SANDBOX_MODES.DANGER_FULL_ACCESS}"\` (caution!)
+3. **Check file permissions:** Ensure Codex can access target files`;
       }
 
       if (errorMessage.includes('model') || errorMessage.includes('unsupported')) {
         return `❌ **Model Error**: Requested model may not be available
 
 **Model Alternatives:**
-- **GPT-5.2-Codex:** \`model: "${MODELS.GPT52_CODEX}"\` (default model)
-- **GPT-5.2:** \`model: "${MODELS.GPT52}"\` (also supported)
-- **GPT-5.1-Codex-Max:** \`model: "${MODELS.GPT51_CODEX_MAX}"\` (previous model)
-- **GPT-5.1-Codex:** \`model: "${MODELS.GPT51_CODEX}"\` (additional model)
-- **GPT-5.1-Codex-Mini:** \`model: "${MODELS.GPT51_CODEX_MINI}"\` (also supported)
-- **GPT-5.1:** \`model: "${MODELS.GPT51}"\` (also supported)
+- **GPT-5.3-Codex:** \`model: "${MODELS.GPT53_CODEX}"\` (default model)
+- **GPT-5.3-Codex-Spark:** \`model: "${MODELS.GPT53_CODEX_SPARK}"\` (faster variant)
+- **GPT-5.2-Codex:** \`model: "${MODELS.GPT52_CODEX}"\` (fallback)
+- **GPT-5.2:** \`model: "${MODELS.GPT52}"\` (fallback)
 
 **Check:** Verify model availability in your OpenAI account.`;
       }
@@ -229,9 +222,8 @@ npm install -g @openai/codex
       return `❌ **Codex Execution Error**: ${errorMessage}
 
 **Request Configuration:**
-- **Model:** ${model || 'gpt-5.2-codex (default)'}
-- **Sandbox:** ${sandbox || 'read-only (default)'}  
-- **Approval:** ${approval || 'untrusted (default)'}
+- **Model:** ${model || 'gpt-5.3-codex (default)'}
+- **Sandbox:** ${sandbox || 'read-only (default)'}
 - **Working Directory:** ${workingDir || 'current directory'}
 
 **Debug Steps:**
