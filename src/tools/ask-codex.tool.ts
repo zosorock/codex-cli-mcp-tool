@@ -75,7 +75,7 @@ function buildCodexPrompt(userPrompt: string, config: {
 
 const askCodexArgsSchema = z.object({
   prompt: z.string().min(1).describe("User query or instruction for Codex. Can include file references and complex requests."),
-  model: z.string().optional().describe(`Optional model to use. Options: ${Object.values(MODELS).join(', ')}. Defaults to gpt-5.3-codex.`),
+  model: z.string().optional().describe(`Optional model to use. Options: ${Object.values(MODELS).join(', ')}. Defaults to gpt-5.4.`),
   sandbox: z.string().optional().describe(`Sandbox mode: ${Object.values(SANDBOX_MODES).join(', ')}. Defaults to read-only for safety.`),
   image: z.union([z.string(), z.array(z.string())]).optional().describe("Optional image file path(s) to include with the prompt"),
   config: z.union([z.string(), z.record(z.string(), z.any())]).optional().describe("Configuration overrides as 'key=value' string or object"),
@@ -122,7 +122,7 @@ export const askCodexTool: UnifiedTool = {
       });
 
       // Detailed progress reporting
-      const modelName = (model as string) || MODELS.GPT53_CODEX;
+      const modelName = (model as string) || MODELS.GPT54;
       const sandboxMode = (sandbox as string) || SANDBOX_MODES.READ_ONLY;
       
       if (onProgress) {
@@ -184,7 +184,7 @@ npm install -g @openai/codex
 **Immediate Solutions:**
 1. **Wait and retry:** Rate limits reset periodically
 2. **Check quota:** Visit OpenAI dashboard for usage details
-3. **Use default model:** Defaults to gpt-5.3-codex which has standard limits`;
+3. **Use default model:** Defaults to gpt-5.4 which has standard limits`;
       }
       
       if (errorMessage.includes('timeout')) {
@@ -193,7 +193,7 @@ npm install -g @openai/codex
 **Solutions:**
 1. **Increase timeout:** Add \`timeout: 300000\` (5 minutes)
 2. **Simplify request:** Break complex queries into smaller parts  
-3. **Retry request:** try a different supported model (for example \`gpt-5.3-codex-spark\` or \`gpt-5.2-codex\`)
+3. **Retry request:** try a different supported model (for example \`gpt-5.4-mini\` or \`gpt-5.3-codex\`)
 4. **Check connectivity:** Ensure stable internet connection`;
       }
       
@@ -210,10 +210,14 @@ npm install -g @openai/codex
         return `❌ **Model Error**: Requested model may not be available
 
 **Model Alternatives:**
-- **GPT-5.3-Codex:** \`model: "${MODELS.GPT53_CODEX}"\` (default model)
+- **GPT-5.4:** \`model: "${MODELS.GPT54}"\` (default model)
+- **GPT-5.4-Mini:** \`model: "${MODELS.GPT54_MINI}"\` (smaller general-purpose option)
+- **GPT-5.3-Codex:** \`model: "${MODELS.GPT53_CODEX}"\` (primary fallback)
 - **GPT-5.3-Codex-Spark:** \`model: "${MODELS.GPT53_CODEX_SPARK}"\` (faster variant)
-- **GPT-5.2-Codex:** \`model: "${MODELS.GPT52_CODEX}"\` (fallback)
-- **GPT-5.2:** \`model: "${MODELS.GPT52}"\` (fallback)
+- **GPT-5.2-Codex:** \`model: "${MODELS.GPT52_CODEX}"\` (older Codex fallback)
+- **GPT-5.2:** \`model: "${MODELS.GPT52}"\` (older general-purpose fallback)
+- **GPT-5.1-Codex-Max:** \`model: "${MODELS.GPT51_CODEX_MAX}"\` (legacy high-capacity Codex option)
+- **GPT-5.1-Codex-Mini:** \`model: "${MODELS.GPT51_CODEX_MINI}"\` (legacy small Codex option)
 
 **Check:** Verify model availability in your OpenAI account.`;
       }
@@ -222,7 +226,7 @@ npm install -g @openai/codex
       return `❌ **Codex Execution Error**: ${errorMessage}
 
 **Request Configuration:**
-- **Model:** ${model || 'gpt-5.3-codex (default)'}
+- **Model:** ${model || 'gpt-5.4 (default)'}
 - **Sandbox:** ${sandbox || 'read-only (default)'}
 - **Working Directory:** ${workingDir || 'current directory'}
 

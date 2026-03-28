@@ -5,7 +5,7 @@ An MCP server that allows Claude Code to interact with the OpenAI Codex CLI. If 
 ## Features
 
 - **Complete Codex Integration**: Access all Codex CLI capabilities through MCP
-- **GPT-5 Model**: Powered by OpenAI's most capable model
+- **GPT-5.4 Default**: Powered by OpenAI's current recommended coding model by default
 - **Sandbox Safety**: Configurable execution modes (read-only, workspace-write, full-access)
 - **Progress Tracking**: Real-time updates for long-running operations
 - **Git Integration**: Apply Codex-generated diffs directly to repositories
@@ -20,7 +20,7 @@ An MCP server that allows Claude Code to interact with the OpenAI Codex CLI. If 
 
 2. **Add to Claude Code using npx**:
    ```bash
-   claude mcp add codex-cli-mcp-tool -- npx -y codex-cli-mcp-tool
+   claude mcp add codex-cli-mcp-tool -- codex-cli-mcp-tool
    ```
    
    Or install globally first:
@@ -44,7 +44,7 @@ Execute Codex with comprehensive parameter support for code analysis, generation
 
 **Parameters:**
 - `prompt` (required): Your query or instruction
-- `model` (optional): gpt-5.3-codex (default), gpt-5.3-codex-spark, gpt-5.2-codex, gpt-5.2
+- `model` (optional): gpt-5.4 (default), gpt-5.4-mini, gpt-5.3-codex, gpt-5.3-codex-spark, gpt-5.2-codex, gpt-5.2, gpt-5.1-codex-max, gpt-5.1-codex-mini
 - `sandbox` (optional): read-only, workspace-write, danger-full-access
 - `image` (optional): Image file path(s) to include
 - `config` (optional): Configuration overrides
@@ -60,7 +60,7 @@ Non-interactive Codex execution for automation workflows.
 
 **Parameters:**
 - `prompt` (required): Command or instruction
-- `model` (optional): gpt-5.3-codex (default), gpt-5.3-codex-spark, gpt-5.2-codex, gpt-5.2
+- `model` (optional): gpt-5.4 (default), gpt-5.4-mini, gpt-5.3-codex, gpt-5.3-codex-spark, gpt-5.2-codex, gpt-5.2, gpt-5.1-codex-max, gpt-5.1-codex-mini
 - `sandbox` (optional): Sandbox mode
 - `timeout` (optional): Execution timeout
 
@@ -81,7 +81,7 @@ Apply the latest Codex-generated diff to your git repository.
 ### Environment Variables
 ```bash
 OPENAI_API_KEY=sk-...           # OpenAI API key
-CODEX_MODEL=gpt-5.3-codex       # Default model
+CODEX_MODEL=gpt-5.4             # Default model
 CODEX_SANDBOX_MODE=read-only    # Default sandbox mode
 ```
 
@@ -89,7 +89,7 @@ CODEX_SANDBOX_MODE=read-only    # Default sandbox mode
 ```toml
 [model]
 preferred_auth_method = "chatgpt"
-default = "gpt-5.3-codex"
+default = "gpt-5.4"
 reasoning_effort = "medium"
 
 [sandbox]

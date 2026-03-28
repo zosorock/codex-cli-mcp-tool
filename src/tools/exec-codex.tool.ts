@@ -10,7 +10,7 @@ import {
 
 const execCodexArgsSchema = z.object({
   prompt: z.string().min(1).describe("Command or instruction for non-interactive Codex execution"),
-  model: z.string().optional().describe(`Model to use: ${Object.values(MODELS).join(', ')}`),
+  model: z.string().optional().describe(`Model to use: ${Object.values(MODELS).join(', ')}. Defaults to gpt-5.4.`),
   sandbox: z.string().optional().describe(`Sandbox mode: ${Object.values(SANDBOX_MODES).join(', ')}`),
   timeout: z.number().optional().describe("Maximum execution time in milliseconds (optional)"),
   workingDir: z.string().optional().describe("Working directory for execution"),

@@ -25,10 +25,14 @@ export const STATUS_MESSAGES = {
 
 // Models
 export const MODELS = {
+  GPT54: "gpt-5.4",
+  GPT54_MINI: "gpt-5.4-mini",
   GPT53_CODEX: "gpt-5.3-codex",
   GPT53_CODEX_SPARK: "gpt-5.3-codex-spark",
   GPT52_CODEX: "gpt-5.2-codex",
   GPT52: "gpt-5.2",
+  GPT51_CODEX_MAX: "gpt-5.1-codex-max",
+  GPT51_CODEX_MINI: "gpt-5.1-codex-mini",
 } as const;
 
 // Sandbox modes
@@ -89,7 +93,7 @@ export const CLI = {
   },
   // Default values
   DEFAULTS: {
-    MODEL: "gpt-5.3-codex",
+    MODEL: "gpt-5.4",
     SANDBOX: "read-only",
     BOOLEAN_TRUE: "true",
     BOOLEAN_FALSE: "false",

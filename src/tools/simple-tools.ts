@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { readFile } from 'fs/promises';
 import { UnifiedTool } from './registry.js';
 import { executeCommand } from '../utils/commandExecutor.js';
-import { CLI } from '../constants.js';
+import { CLI, MODELS } from '../constants.js';
 
 // Read version from package.json
 const getVersion = async () => {
@@ -58,7 +58,7 @@ export const helpTool: UnifiedTool = {
 ### ask-codex
 Execute OpenAI Codex with comprehensive parameter support.
 - **prompt** (required): Your query or instruction
-- **model** (optional): gpt-5.3-codex (default), gpt-5.3-codex-spark, gpt-5.2-codex, gpt-5.2
+- **model** (optional): ${MODELS.GPT54} (default), ${MODELS.GPT54_MINI}, ${MODELS.GPT53_CODEX}, ${MODELS.GPT53_CODEX_SPARK}, ${MODELS.GPT52_CODEX}, ${MODELS.GPT52}, ${MODELS.GPT51_CODEX_MAX}, ${MODELS.GPT51_CODEX_MINI}
 - **sandbox** (optional): read-only, workspace-write, danger-full-access
 - **image** (optional): Image file path(s) to include
 - **config** (optional): Configuration overrides
@@ -67,7 +67,7 @@ Execute OpenAI Codex with comprehensive parameter support.
 ### exec-codex
 Non-interactive Codex execution for automation.
 - **prompt** (required): Command or instruction
-- **model** (optional): Model to use
+- **model** (optional): ${MODELS.GPT54} (default), ${MODELS.GPT54_MINI}, ${MODELS.GPT53_CODEX}, ${MODELS.GPT53_CODEX_SPARK}, ${MODELS.GPT52_CODEX}, ${MODELS.GPT52}, ${MODELS.GPT51_CODEX_MAX}, ${MODELS.GPT51_CODEX_MINI}
 - **sandbox** (optional): Sandbox mode
 
 ### apply-diff
@@ -83,7 +83,7 @@ Test MCP server connection.
 
 Set environment variables:
 - \`OPENAI_API_KEY\`: Your OpenAI API key
-- \`CODEX_MODEL\`: Default model (gpt-5.3-codex, gpt-5.3-codex-spark, etc.)
+- \`CODEX_MODEL\`: Default model (${MODELS.GPT54}, ${MODELS.GPT54_MINI}, etc.)
 - \`CODEX_SANDBOX_MODE\`: Default sandbox mode
 
 Or configure via \`~/.codex/config.toml\`
@@ -93,7 +93,7 @@ Or configure via \`~/.codex/config.toml\`
 \`\`\`
 ask-codex "Explain this code: @main.py"
 ask-codex "Fix the bug in login function" sandbox="workspace-write"
-ask-codex "Generate unit tests" model="gpt-5.3-codex-spark"
+ask-codex "Generate unit tests" model="${MODELS.GPT53_CODEX_SPARK}"
 \`\`\`
 
 For more information, visit: https://github.com/openai/codex`;

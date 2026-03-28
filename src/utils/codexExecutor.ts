@@ -190,7 +190,7 @@ export function validateModel(model: string): boolean {
 }
 
 export function getModelFallbacks(_model: string): string[] {
-  return [MODELS.GPT52_CODEX];
+  return [MODELS.GPT53_CODEX];
 }
 
 export function getSandboxFallbacks(sandbox: string): string[] {
